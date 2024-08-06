@@ -1,6 +1,25 @@
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import GameSelectPanel from "../components/GameSelectPanel";
+import Leaderboard from '../components/Leaderboard';
+import { useSelectedPreset } from '../contexts/SelectedPresetContext';
+import NoteRender from '../components/NoteRender';
+
 export default function HomePage() {
-  return <>
-    <h1>Home</h1>
-    <p>Put something interesting here!</p>
-  </>;
+  const { setSelectedPreset } = useSelectedPreset();
+  const navigate = useNavigate();
+
+  const onSelectPreset = (preset) => {
+    setSelectedPreset(preset);
+    navigate('/gameplay');
+  };
+
+  return (
+    <>
+      <p>Choose a game</p>
+      <GameSelectPanel onSelectPreset={onSelectPreset} />
+      <Leaderboard />
+      <NoteRender />
+    </>
+  );
 }

@@ -4,9 +4,10 @@ import CurrentUserContext from "../contexts/current-user-context";
 
 export default function SiteHeadingAndNav() {
   const { currentUser } = useContext(CurrentUserContext);
+  console.log(currentUser);
 
   return <header>
-    <a id='logo' href='/'>React/Express Auth</a>
+    <a id='logo' href='/'>Riff Rabbit</a>
     <nav>
       <ul>
         <li><NavLink to='/'>Home</NavLink></li>
