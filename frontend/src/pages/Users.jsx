@@ -4,6 +4,7 @@ import { fetchHandler } from "../utils";
 import UserLink from "../components/UserLink";
 import CurrentUserContext from "../contexts/current-user-context";
 import { getPatchOptions } from "../utils";
+import Challenges from "../components/Challenges";
 
 export default function UsersPage() {
   const [users, setUsers] = useState([]);
@@ -83,6 +84,7 @@ export default function UsersPage() {
           }
         })}
       </ul>
+      <Challenges />
     </>
   );
 }

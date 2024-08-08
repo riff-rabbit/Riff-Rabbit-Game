@@ -3,8 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import GameSelectPanel from "../components/GameSelectPanel";
 import Leaderboard from '../components/Leaderboard';
 import { useSelectedPreset } from '../contexts/SelectedPresetContext';
-import NoteRender from '../components/NoteRender';
-import NotePlayer from '../components/NotePlayer';
 
 export default function HomePage() {
   const { setSelectedPreset } = useSelectedPreset();
@@ -20,7 +18,6 @@ export default function HomePage() {
       <p>Choose a game</p>
       <GameSelectPanel onSelectPreset={onSelectPreset} />
       <Leaderboard />
-      <NotePlayer />
     </>
   );
 }

@@ -34,7 +34,7 @@ export const presets = [
   {
     name: "Intervalley Mega",
     rounds: 15,
-    startOnC: true,
+    startOnC: false,
     direction: "both",
     octaves: 2,
     secondsPerRound: 5,
