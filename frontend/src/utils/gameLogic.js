@@ -89,12 +89,45 @@ export function getNoteFromIndex(index) {
   return note + octave;
 }
 
+// export function calculateInterval(firstNote, secondNote) {
+//   const firstIndex = getNoteIndex(firstNote);
+//   const secondIndex = getNoteIndex(secondNote);
+//   const distance = Math.abs(secondIndex - firstIndex);
+//   return intervals[distance % 12];
+// }
+
+// export function calculateInterval(firstNote, secondNote) {
+//   const firstIndex = getNoteIndex(firstNote);
+//   const secondIndex = getNoteIndex(secondNote);
+//   const distance = Math.abs(secondIndex - firstIndex);
+  
+//   // Check if the notes are the same and in the same octave
+//   if (distance === 0) {
+//     return "unison";
+//   } else {
+//     return intervals[distance % 12];
+//   }
+// }
+
 export function calculateInterval(firstNote, secondNote) {
   const firstIndex = getNoteIndex(firstNote);
   const secondIndex = getNoteIndex(secondNote);
   const distance = Math.abs(secondIndex - firstIndex);
-  return intervals[distance % 12];
+  
+  if (distance === 0) {
+    return "unison";
+  } else {
+    const octaveCount = Math.floor(distance / 12);
+    const intervalIndex = distance % 12;
+    if (intervalIndex === 0 && octaveCount > 0) {
+      return octaveCount + " octave" + (octaveCount > 1 ? "s" : "");
+    } else {
+      return intervals[intervalIndex];
+    }
+  }
 }
+
+
 
 export function generateGameRounds(preset) {
   if (preset.rounds !== Infinity) {
@@ -105,6 +138,7 @@ export function generateGameRounds(preset) {
 
     for (let i = 0; i < rounds; i++) {
       
+      // turn this into a "generateSingleRound" function
       let firstNote, secondNote;
       if (startOnC) {
         firstNote = "C3";
@@ -114,33 +148,33 @@ export function generateGameRounds(preset) {
       }
 
       let secondNoteIndex;
+
+
       if (direction === "ascending") {
-        const minIndex = getNoteIndex(firstNote) + 1;
+        const minIndex = getNoteIndex(firstNote) + 1; // Ensures no unison in ascending
         const maxIndex = Math.min(minIndex + (octaves * 12 - 1), noteRangeEnd);
-        secondNoteIndex =
-          minIndex + Math.floor(Math.random() * (maxIndex - minIndex + 1));
+        secondNoteIndex = minIndex + Math.floor(Math.random() * (maxIndex - minIndex + 1));
       } else if (direction === "descending") {
+        const minIndex = getNoteIndex(firstNote) - (octaves * 12 - 1);
         const maxIndex = getNoteIndex(firstNote) - 1;
-        const minIndex = Math.max(
-          maxIndex - (octaves * 12 - 1),
-          noteRangeStart
-        );
         secondNoteIndex =
-          minIndex + Math.floor(Math.random() * (maxIndex - minIndex + 1));
-      } else {
-        let randomOffset = Math.floor(Math.random() * (octaves * 12));
+          maxIndex - Math.floor(Math.random() * (maxIndex - minIndex + 1));
+      }
+
+      else {
+        let randomOffset;
+        do {
+          randomOffset = Math.floor(Math.random() * (octaves * 12));
+        } while (randomOffset === 0); // Prevents selecting the same note index
+      
         if (Math.random() < 0.5) {
-          secondNoteIndex = Math.max(
-            getNoteIndex(firstNote) - randomOffset,
-            noteRangeStart
-          );
+          secondNoteIndex = Math.max(getNoteIndex(firstNote) - randomOffset, noteRangeStart);
         } else {
-          secondNoteIndex = Math.min(
-            getNoteIndex(firstNote) + randomOffset,
-            noteRangeEnd
-          );
+          secondNoteIndex = Math.min(getNoteIndex(firstNote) + randomOffset, noteRangeEnd);
         }
       }
+      
+
 
       secondNote = getNoteFromIndex(secondNoteIndex);
       const correct = calculateInterval(firstNote, secondNote);
@@ -170,3 +204,32 @@ export function infinityGame() {
   }
 
 } 
+
+
+
+
+   // if (direction === "ascending") {
+      //   const minIndex = getNoteIndex(firstNote) + 1;
+      //   const maxIndex = Math.min(minIndex + (octaves * 12 - 1), noteRangeEnd);
+      //   secondNoteIndex =
+      //     minIndex + Math.floor(Math.random() * (maxIndex - minIndex + 1));
+      //   } else if (direction === "descending") {
+      //     const minIndex = getNoteIndex(firstNote) - (octaves * 12 - 1);
+      //     const maxIndex = getNoteIndex(firstNote) - 1;
+      //     secondNoteIndex =
+      //       maxIndex - Math.floor(Math.random() * (maxIndex - minIndex + 1));
+      //   }
+      // else {
+      //   let randomOffset = Math.floor(Math.random() * (octaves * 12));
+      //   if (Math.random() < 0.5) {
+      //     secondNoteIndex = Math.max(
+      //       getNoteIndex(firstNote) - randomOffset,
+      //       noteRangeStart
+      //     );
+      //   } else {
+      //     secondNoteIndex = Math.min(
+      //       getNoteIndex(firstNote) + randomOffset,
+      //       noteRangeEnd
+      //     );
+      //   }
+      // }

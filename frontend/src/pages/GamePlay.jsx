@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 import Vex from "vexflow";
 import { useRef } from "react";
 import NoteRender from "../components/NoteRender";
+import NotePlayer from "../components/NotePlayer";
+import playSequence from "../utils/playSequence";
 
 const GamePlay = () => {
   const VF = Vex.Flow;
@@ -38,6 +40,19 @@ const GamePlay = () => {
       handleNextRound();
     }
   }, [timeLeft, currentRound, rounds]);
+
+  useEffect(() => {
+    console.log('playing sound', rounds, currentRound)
+    if (!rounds || !rounds[currentRound]) return;
+
+    const {firstNote, secondNote} = rounds[currentRound];
+    playSequence(firstNote, secondNote);
+  }, [rounds, currentRound]);
+
+  //! CURRENT ROUND DATA 
+
+  const currentRoundData = rounds[currentRound];
+  
 
   const handleAnswerClick = (answer) => {
     if (selectedAnswer !== null) return; // prevent changing answer
@@ -77,9 +92,7 @@ const GamePlay = () => {
 
   if (!selectedPreset) return <div>No game selected.</div>;
 
-  //! CURRENT ROUND DATA 
-
-  const currentRoundData = rounds[currentRound];
+  
   // console.log("🚀 ~ GamePlay ~ currentRoundData:", currentRoundData)
 
   return (
@@ -91,6 +104,7 @@ const GamePlay = () => {
         {currentRoundData?.secondNote}
       </h3>
       <NoteRender roundNotes={currentRoundData} />
+      <NotePlayer roundNotes={currentRoundData} />
       <div>
         {intervals.map((interval) => (
           <button

@@ -5,6 +5,7 @@ const SelectedPresetContext = createContext();
 
 export const SelectedPresetProvider = ({ children }) => {
   const [selectedPreset, setSelectedPreset] = useState(null);
+
   return (
     <SelectedPresetContext.Provider value={{ selectedPreset, setSelectedPreset }}>
       {children}
