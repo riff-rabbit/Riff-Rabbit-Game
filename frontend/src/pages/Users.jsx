@@ -49,43 +49,48 @@ export default function UsersPage() {
   //   : [];
 
   const filteredUsers = searchTerm
-  ? users.filter(
-      (user) => user.id !== currentUser.id && user.username.includes(searchTerm)
-    )
-  : [];
-
+    ? users.filter(
+        (user) =>
+          user.id !== currentUser.id && user.username.includes(searchTerm)
+      )
+    : [];
 
   return (
-    <>
-      <h1>Friends</h1>
-      <ul>
-        {friends.map((user) => (
-          <li key={user.id}>
-            <UserLink user={user} />
-            <button onClick={() => removeFriend(user.id)}>Remove Friend</button>
-          </li>
-        ))}
-      </ul>
+    <div className="p-5 flex flex-col align-middle justify-center items-center">
+      {/* <h1>Friends</h1> */}
       <input
+        className="rounded-full text-ct-dark-grey font-medium px-3 py-1"
         type="text"
         placeholder="Search users..."
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
+
+    <div>
       <ul>
         {filteredUsers.map((user) => {
           if (currentUser && !currentUser.friends.includes(user.id)) {
             return (
-              <li key={user.id}>
-                <UserLink user={user} />
-                <button onClick={() => addFriend(user.id)}>Add Friend</button>
+              <li className=" my-2 rounded-full flex items-center align-middle justify-between"  key={user.id}>
+                <div className="bg-ct-light-grey w-full px-4 rounded-l-full py-2"><UserLink user={user} /></div>
+                <button className="bg-ct-light-blue w-36 rounded-r-full px-4 py-2 hover:bg-ct-hover-blue transition-colors duration-300 ease-in-out" onClick={() => addFriend(user.id)}>Follow</button>
               </li>
             );
           }
         })}
       </ul>
-      <Challenges />
-    </>
+
+      <ul>
+        {friends.map((user) => (
+          <li className=" my-2 rounded-full flex items-center align-middle justify-between" key={user.id}>
+            <div className="bg-ct-light-grey w-full px-4 rounded-l-full py-2"><UserLink user={user} /></div>
+            <button className="bg-ct-light-purple w-36 rounded-r-full px-4 py-2 hover:bg-ct-hover-purple transition-colors duration-300 ease-in-out" onClick={() => removeFriend(user.id)}>Unfollow</button>
+          </li>
+        ))}
+      </ul>
+      </div>
+
+      <Challenges users={users}/>
+    </div>
   );
 }
-

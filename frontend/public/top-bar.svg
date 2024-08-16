@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Created with Vectornator (http://vectornator.io/) -->
+<svg height="100%" stroke-miterlimit="10" style="fill-rule:nonzero;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" version="1.1" viewBox="-5.68434e-14 0 3840 224.7" width="100%" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:vectornator="http://vectornator.io" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs/>
+<g id="Layer-1" vectornator:layerName="Layer 1">
+<path d="M-5.68434e-14 0L3840 0L3840 141.591L-5.68434e-14 141.591L-5.68434e-14 0Z" fill="#222233" fill-rule="nonzero" opacity="1" stroke="none" vectornator:layerName="Rectangle 1"/>
+<path d="M1250.36 141.591C1250.36 95.6907 1287.57 58.4814 1333.47 58.4814L2506.53 58.4814C2552.43 58.4814 2589.64 95.6907 2589.64 141.591L2589.64 141.591C2589.64 187.491 2552.43 224.7 2506.53 224.7L1333.47 224.7C1287.57 224.7 1250.36 187.491 1250.36 141.591L1250.36 141.591Z" fill="#222233" fill-rule="nonzero" opacity="1" stroke="none" vectornator:layerName="Rectangle 2"/>
+</g>
+</svg>

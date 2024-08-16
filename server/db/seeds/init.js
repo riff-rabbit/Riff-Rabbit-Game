@@ -135,7 +135,7 @@ exports.seed = async (knex) => {
   await User.create('jane', 'jane', 'Jane');
 
   await Challenge.create(1, 2, 1, JSON.stringify(generatedGame));
-  await Challenge.create(2, 1, 2, JSON.stringify(generatedGame), 'winner');
+  await Challenge.create(2, 1, 2, JSON.stringify(generatedGame), 'completed');
 };
 
 

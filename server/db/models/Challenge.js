@@ -41,7 +41,6 @@ class Challenge {
 
   static async create(challenger, responder, preset, rounds, status = 'pending') {
     // hash the plain-text password using bcrypt before storing it in the database);
-
     const query = `INSERT INTO challenges (challenger, responder, preset, rounds, status)
       VALUES (?, ?, ?, ?, ?) RETURNING *`;
     const { rows } = await knex.raw(query, [challenger, responder, preset, rounds, status]);

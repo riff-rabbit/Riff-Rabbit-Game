@@ -12,6 +12,8 @@ import UserPage from './pages/User';
 import GamePlay from './pages/GamePlay';
 import { SelectedPresetProvider } from './contexts/SelectedPresetContext';
 import GameOver from './pages/GameOver';
+import "./index.css";
+import ChallengesPage from './pages/ChallengesPage';
 
 
 
@@ -23,7 +25,7 @@ export default function App() {
 
   return <>
     <SiteHeadingAndNav />
-    <main>
+    <main className='flex flex-col'>
     <SelectedPresetProvider>
           <Routes>
             <Route path='/' element={<Home />} />
@@ -34,6 +36,7 @@ export default function App() {
             <Route path='/gameplay' element={<GamePlay />} />
             <Route path='/gameover' element={<GameOver />} />
             <Route path='*' element={<NotFoundPage />} />
+            <Route path='/challenges' element={<ChallengesPage />} />
           </Routes>
         </SelectedPresetProvider>
     </main>

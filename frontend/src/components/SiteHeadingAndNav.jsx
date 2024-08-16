@@ -6,24 +6,31 @@ export default function SiteHeadingAndNav() {
   const { currentUser } = useContext(CurrentUserContext);
   console.log(currentUser);
 
-  return <header>
-    <a id='logo' href='/'>Riff Rabbit</a>
-    <nav>
-      <ul>
-        <li><NavLink to='/'>Home</NavLink></li>
+  return (
+    <header>
+      <img className="w-100% h-auto" src='/public/top-bar.svg' alt='logo' />
+      <div className="flex p-4 justify-between">
+      <a id='logo' href='/'>
+        <img src='/public/Logo.svg' alt='logo' width='100' height='100' />
+      </a>
+      <nav>
+        <ul>
+          {/* <li><NavLink to='/'>Home</NavLink></li> */}
 
-        {
-          currentUser
-            ? <>
-              <li><NavLink to='/users' end={true}>Users</NavLink></li>
-              <li><NavLink to={`/users/${currentUser.id}`}>{currentUser.username}</NavLink></li>
-            </>
-            : <>
-              <li><NavLink to='/login'>Login</NavLink></li>
-              <li><NavLink to='/sign-up'>Sign Up</NavLink></li>
-            </>
-        }
-      </ul>
-    </nav>
-  </header>;
+          {
+            currentUser
+              ? <>
+                {/* <li><NavLink to='/users' end={true}>Friends</NavLink></li> */}
+                <li><NavLink to={`/users/${currentUser.id}`}>{currentUser.username}</NavLink></li>
+              </>
+              : <>
+                <li><NavLink to='/login'>Login</NavLink></li>
+                <li><NavLink to='/sign-up'>Sign Up</NavLink></li>
+              </>
+          }
+        </ul>
+      </nav>
+      </div>
+    </header>
+  );
 }

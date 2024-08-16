@@ -21,26 +21,39 @@ const Leaderboard = () => {
     fetchLeaderboard();
   }, []);
 
-  const renderUser = (user, index) => (
-    <div key={user.id}>
-      {index + 1}. {user.display_name} - {user.points} points
-    </div>
-  );
+  const renderUser = (user, index) => {
+    let gradient;
+
+    if (index === 0) {
+      gradient = "linear-gradient(to right, #FFD700, #FFA500)"; // Gold
+    } else if (index === 1 || index === 2) {
+      gradient = "linear-gradient(to right, #C0C0C0, #B0C4DE)"; // Silver
+    } else if (index === 3 || index === 4) {
+      gradient = "linear-gradient(to right, #CD7F32, #8B4513)"; // Brass
+    }
+
+    return (
+      <>
+      <div
+        className="relative font-semibold flex items-center my-4 justify-center w-56 justify-items-center h-14 rounded-xl"
+        style={{
+          border: "4px solid transparent",
+          borderRadius: "40px",
+          backgroundImage: `linear-gradient(to right, #13111D, #13111D), ${gradient}`,
+          backgroundOrigin: "border-box",
+          backgroundClip: "padding-box, border-box",
+        }}
+        key={user.id}
+      >
+        {user.display_name} {user.points}xp
+      </div>
+      </>
+    );
+  };
 
   return (
-    <div>
-      <div className="gold">
-        <h2>Gold</h2>
-        {users.slice(0, 1).map(renderUser)}
-      </div>
-      <div className="silver">
-        <h2>Silver</h2>
-        {users.slice(1, 3).map(renderUser)}
-      </div>
-      <div className="brass">
-        <h2>Brass</h2>
-        {users.slice(3, 5).map(renderUser)}
-      </div>
+    <div className="bg-ct-light-grey md:h-96 flex flex-col items-center justify-items-center rounded-xl p-4">
+      {users.slice(0, 5).map(renderUser)}
     </div>
   );
 };

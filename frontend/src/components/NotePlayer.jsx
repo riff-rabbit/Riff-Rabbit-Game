@@ -9,7 +9,7 @@ const handlePlay = () => {
 
   return (
     <div>
-      <button onClick={handlePlay}>Play Sequence</button>
+      <button onClick={handlePlay}>Play</button>
     </div>
   );
 };

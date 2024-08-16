@@ -71,7 +71,7 @@ const NoteRender = ({ roundNotes }) => {
     }
   }, [roundNotes]);
 
-  return <div ref={noteRef}></div>;
+  return <div className="bg-white rounded-lg flex w-full align-middle items-center justify-center h-20" ref={noteRef}></div>;
 };
 
 export default NoteRender;
