@@ -4,10 +4,6 @@ const authUtils = require("../../utils/auth-utils");
 class Challenge {
   #password = null; // a private property
 
-  // This constructor is NOT how a controller creates a new user in the database.
-  // Instead, it is used by each of the User static methods to hide the hashed
-  // password of users before sending user data to the client. Since #passwordHash
-  // is private, only the isValidPassword instance method can access that value.
   constructor({ id, challenger, responder, preset, winner, rounds, created_at, status }) {
     this.id = id;
     this.challenger = challenger;
@@ -66,9 +62,20 @@ class Challenge {
     return updatedChallenge ? new Challenge(updatedChallenge) : null;
   }
 
-  static async deleteAll() {
-    return knex("challenges").del();
+  // Challenge.js
+  static async updateChallengeResult(id, status, winnerId) {
+    const query = `
+      UPDATE challenges
+      SET status = ?, winner = ?
+      WHERE id = ?
+      RETURNING *
+    `;
+    const { rows } = await knex.raw(query, [status, winnerId, id]);
+    const updatedChallenge = rows[0];
+    return updatedChallenge ? new Challenge(updatedChallenge) : null;
   }
+
+
 
 }
 

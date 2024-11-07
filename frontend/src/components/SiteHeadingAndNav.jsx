@@ -21,7 +21,7 @@ export default function SiteHeadingAndNav() {
             currentUser
               ? <>
                 {/* <li><NavLink to='/users' end={true}>Friends</NavLink></li> */}
-                <li><NavLink to={`/users/${currentUser.id}`}>{currentUser.username}</NavLink></li>
+                <li className="bg-ct-orange text-white rounded-full px-2 bulge-on-hover hover:bg-ct-hover-purple transition-colors ease-in-out duration-300"><NavLink to={`/users/${currentUser.id}`}>{currentUser.username}</NavLink></li>
               </>
               : <>
                 <li><NavLink to='/login'>Login</NavLink></li>

@@ -11,11 +11,22 @@ export const getAllChallenges = async () => {
   return challenges || [];
 };
 
-export const getChallenge = async (id) => {
-  return fetchHandler(`${baseUrl}/${id}`);
-}
+// export const getChallenge = async (id) => {
+//   const [challenge, error] = await fetchHandler(`${baseUrl}/${id}`);
+//   if (error) console.log(error); 
+//   return challenge || null;
+// }
 
-export const updateChallengeStatus = async ({ id, status }) => {
+export const getChallenge = async (id) => {
+  const [challenge, error] = await fetchHandler(`${baseUrl}/${id}`);
+  if (error) {
+    console.log('Error fetching challenge:', error);
+    return null;
+  }
+  return challenge;
+};
+
+export const updateChallengeStatus = async (id, status) => {
   return fetchHandler(`${baseUrl}/${id}`, getPatchOptions({ status })) 
 }
 
@@ -23,3 +34,10 @@ export const updateChallengeStatus = async ({ id, status }) => {
 export const getIncomingChallenges = async () => {
   return fetchHandler(`${baseUrl}/incoming`);
 }
+
+export const updateChallengeResult = async (id, challengerScore, responderScore) => {
+  return fetchHandler(
+      `${baseUrl}/${id}/result`,
+      getPatchOptions({ challengerScore, responderScore })
+  );
+};

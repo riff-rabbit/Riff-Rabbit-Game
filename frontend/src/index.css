@@ -155,3 +155,38 @@ form {
 .bobbing-head {
     animation: bobbing 3.5s ease-in-out infinite;
 }
+
+/* styles.css */
+
+.correct-glow {
+  animation: correctGlow 1s ease-in-out;
+}
+
+@keyframes correctGlow {
+  0% {
+    box-shadow: 0 0 0px 0 rgba(0, 255, 0, 0);
+  }
+  50% {
+    box-shadow: 0 0 20px 10px rgba(0, 255, 0, 0.7);
+  }
+  100% {
+    box-shadow: 0 0 0px 0 rgba(0, 255, 0, 0);
+  }
+}
+
+.incorrect-glow {
+  animation: incorrectGlow 1s ease-in-out;
+}
+
+@keyframes incorrectGlow {
+  0% {
+    box-shadow: 0 0 0px 0 rgba(255, 0, 0, 0);
+  }
+  50% {
+    box-shadow: 0 0 20px 10px rgba(255, 0, 0, 0.7);
+  }
+  100% {
+    box-shadow: 0 0 0px 0 rgba(255, 0, 0, 0);
+  }
+}
+

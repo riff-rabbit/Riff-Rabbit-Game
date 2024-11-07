@@ -63,21 +63,38 @@ export const noteNames = [
   "A#",
   "B",
 ];
+// export const intervals = [
+//   "unison",
+//   "minor second",
+//   "major second",
+//   "minor third",
+//   "major third",
+//   "perfect fourth",
+//   "tritone",
+//   "perfect fifth",
+//   "minor sixth",
+//   "major sixth",
+//   "minor seventh",
+//   "major seventh",
+//   "octave",
+// ];
+
 export const intervals = [
-  "unison",
-  "minor second",
-  "major second",
-  "minor third",
-  "major third",
-  "perfect fourth",
-  "tritone",
-  "perfect fifth",
-  "minor sixth",
-  "major sixth",
-  "minor seventh",
-  "major seventh",
-  "octave",
+  "unison",          // 0
+  "minor second",    // 1
+  "major second",    // 2
+  "minor third",     // 3
+  "major third",     // 4
+  "perfect fourth",  // 5
+  "tritone",         // 6
+  "perfect fifth",   // 7
+  "minor sixth",     // 8
+  "major sixth",     // 9
+  "minor seventh",   // 10
+  "major seventh",   // 11
+  "octave",          // 12
 ];
+
 
 export function getNoteIndex(note) {
   return noteNames.indexOf(note.slice(0, -1)) + parseInt(note.slice(-1)) * 12;
@@ -109,21 +126,37 @@ export function getNoteFromIndex(index) {
 //   }
 // }
 
+// export function calculateInterval(firstNote, secondNote) {
+//   const firstIndex = getNoteIndex(firstNote);
+//   const secondIndex = getNoteIndex(secondNote);
+//   const distance = Math.abs(secondIndex - firstIndex);
+  
+//   if (distance === 0) {
+//     return "unison";
+//   } else {
+//     const octaveCount = Math.floor(distance / 12);
+//     const intervalIndex = distance % 12;
+//     if (intervalIndex === 0 && octaveCount > 0) {
+//       return octaveCount + " octave" + (octaveCount > 1 ? "s" : "");
+//     } else {
+//       return intervals[intervalIndex];
+//     }
+//   }
+// }
+
 export function calculateInterval(firstNote, secondNote) {
   const firstIndex = getNoteIndex(firstNote);
   const secondIndex = getNoteIndex(secondNote);
   const distance = Math.abs(secondIndex - firstIndex);
-  
+
   if (distance === 0) {
     return "unison";
+  } else if (distance % 12 === 0) {
+    // Any multiple of 12 semitones is considered an octave
+    return "octave";
   } else {
-    const octaveCount = Math.floor(distance / 12);
     const intervalIndex = distance % 12;
-    if (intervalIndex === 0 && octaveCount > 0) {
-      return octaveCount + " octave" + (octaveCount > 1 ? "s" : "");
-    } else {
-      return intervals[intervalIndex];
-    }
+    return intervals[intervalIndex];
   }
 }
 

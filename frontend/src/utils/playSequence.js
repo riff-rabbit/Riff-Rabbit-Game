@@ -1,11 +1,9 @@
 import * as Tone from 'tone';
 
 const playSequence = async (note1, note2) => {
-  // Start the audio context
   await Tone.start();
   console.log("Audio context started");
 
-  // Create a sampler
   const sampler = new Tone.Sampler({
     urls: {
       C4: "C4.mp3",

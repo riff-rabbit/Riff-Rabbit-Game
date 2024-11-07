@@ -16,7 +16,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@tsparticles/engine": "^3.5.0",
+    "@tsparticles/react": "^3.0.0",
+    "@tsparticles/slim": "^3.5.0",
     "axios": "^1.7.2",
+    "clsx": "^2.1.1",
+    "framer-motion": "^11.3.28",
+    "react-loader-spinner": "^6.1.6",
+    "tailwind-merge": "^2.5.2",
     "tone": "^15.0.4",
     "vexflow": "^3.0.9"
   },

@@ -10,6 +10,8 @@ import { useRef } from "react";
 import NoteRender from "../components/NoteRender";
 import NotePlayer from "../components/NotePlayer";
 import playSequence from "../utils/playSequence";
+import { updateChallengeStatus } from "../adapters/challenge-adapter";
+import { updateChallengeResult } from "../adapters/challenge-adapter";
 
 const GamePlay = () => {
   const VF = Vex.Flow;
@@ -19,11 +21,14 @@ const GamePlay = () => {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [timeLeft, setTimeLeft] = useState(0);
+  const [feedback, setFeedback] = useState(null);
+
   const navigate = useNavigate();
   const notationRef = useRef(null);
   const location = useLocation();
   const game = location.state?.rounds;
   const status = location.state?.status;
+  const challenge_id = location.state?.challenge_id;
   console.log(location);
 
   useEffect(() => {
@@ -57,57 +62,156 @@ const GamePlay = () => {
 
   const currentRoundData = rounds[currentRound];
 
-  const handleAnswerClick = (answer) => {
-    if (selectedAnswer !== null) return; // prevent changing answer
-    setSelectedAnswer(answer);
+  // const handleAnswerClick = (answer) => {
+  //   playAudio()
+  //   if (selectedAnswer !== null) return; // prevent changing answer
+  //   setSelectedAnswer(answer);
 
-    if (rounds[currentRound].correct === answer) {
-      console.log(`Correct answer. Correct answers: ${correctAnswers}`);
+  //   if (rounds[currentRound].correct === answer) {
+  //     console.log(`Correct answer. Correct answers: ${correctAnswers}`);
+  //     setCorrectAnswers(correctAnswers + 1);
+  //   } else {
+  //     console.log(`Incorrect answer. Correct answers: ${correctAnswers}`);
+  //   }
+  // };
+
+  const handleAnswerClick = (answer) => {
+    playAudio();
+    if (selectedAnswer !== null) return; // Prevent changing answer
+    setSelectedAnswer(answer);
+  
+    const correctInterval = rounds[currentRound].correct;
+  
+    if (correctInterval === answer) {
+      console.log(`Correct answer. Correct answers: ${correctAnswers + 1}`);
       setCorrectAnswers(correctAnswers + 1);
+      setFeedback("correct");
     } else {
       console.log(`Incorrect answer. Correct answers: ${correctAnswers}`);
+      setFeedback("incorrect");
     }
+  
+    // Reset feedback after 1 second
+    setTimeout(() => {
+      setFeedback(null);
+    }, 1000);
   };
+  
+  
 
-  const handleNextRound = () => {
-    setSelectedAnswer(null);
-    if (currentRound < rounds.length - 1) {
-      setCurrentRound(currentRound + 1);
+const handleNextRound = async () => {
+  setSelectedAnswer(null);
 
-      setTimeLeft(selectedPreset.secondsPerRound);
-    } else {
-      console.log(`Game over! Correct answers: ${correctAnswers}`);
-      const pointsEarned = correctAnswers * 10;
-      updateUserPoints(pointsEarned).then((totalPoints) => {
-        console.log(totalPoints);
-        navigate("/gameover", {
-          state: {
-            gameName: selectedPreset.name,
-            rounds: selectedPreset.rounds,
-            correctAnswers,
-            pointsEarned,
-            totalPoints,
-            status: game ? status : null,
-          },
-        });
+  if (currentRound < rounds.length - 1) {
+    setCurrentRound(currentRound + 1);
+    setTimeLeft(selectedPreset.secondsPerRound);
+  } else {
+    console.log(`Game over! Correct answers: ${correctAnswers}`);
+    const pointsEarned = correctAnswers * 10;
+
+    try {
+      // Only perform challenge updates if in multiplayer mode
+      if (challenge_id) {
+        console.log('Updating challenge status...');
+        await updateChallengeStatus(challenge_id, "completed");
+        
+        const challengerScore = correctAnswers;
+        const responderScore = rounds.length - correctAnswers;
+        
+        console.log('Submitting challenge result...');
+        await submitChallengeResult(challenge_id, challengerScore, responderScore);
+      }
+
+      console.log('Updating user points...');
+      const [updatedUser, error] = await updateUserPoints(pointsEarned);
+      if (error) {
+        console.error('Failed to update user points:', error);
+      }
+
+      console.log('Updated user:', updatedUser);
+
+      navigate("/gameover", {
+        state: {
+          gameName: selectedPreset.name,
+          rounds: selectedPreset.rounds,
+          correctAnswers,
+          pointsEarned,
+          totalPoints: updatedUser ? updatedUser.points : null,
+          status: game ? status : null,
+        },
+      });
+    } catch (err) {
+      console.error('Error in handleNextRound:', err);
+
+      // Ensure navigation to GameOver page even if errors occur
+      navigate("/gameover", {
+        state: {
+          gameName: selectedPreset.name,
+          rounds: selectedPreset.rounds,
+          correctAnswers,
+          pointsEarned,
+          totalPoints: null,
+          status: game ? status : null,
+        },
       });
     }
-  };
+  }
+};
+
+
+
+
+const submitChallengeResult = async (challengeId, challengerScore, responderScore) => {
+  try {
+      const [response, error] = await updateChallengeResult(
+        challengeId,
+        challengerScore,
+        responderScore
+    );
+      if (error) {
+          console.error("Failed to update challenge result:", error);
+      } else {
+          console.log("Challenge result updated successfully:", response);
+      }
+  } catch (error) {
+      console.error("Error in submitting challenge result:", error);
+  }
+};
+
+
+
 
   if (!selectedPreset) return <div>No game selected.</div>;
 
   // console.log("🚀 ~ GamePlay ~ currentRoundData:", currentRoundData)
 
+  const audio = new Audio('../../public/click.mp3')
+  const playAudio = () => {
+    audio.play()
+  }
+
+
+
   return (
     <div className="flex flex-col align-middle justify-center items-center">
       <h1>{selectedPreset.name}</h1>
-      <h2>Round {currentRound + 1}</h2>
+
+      <div className="flex gap-3">
+        <h2 className="text-ct-orange font-semibold">Round {currentRound + 1}</h2>
+        <div className="flex items-center justify-center">
+          <img className="w-2 m-1" src="../../public/timer.svg" alt="" />
+          {timeLeft}s
+        </div>
+      </div>
+
       {/* <h3>
         First Note: {currentRoundData?.firstNote}, Second Note:{" "}
         {currentRoundData?.secondNote}
       </h3> */}
       <div className="flex flex-col align-middle justify-center items-center">
-        <NoteRender roundNotes={currentRoundData} />
+        {/* <NoteRender roundNotes={currentRoundData} /> */}
+        <NoteRender roundNotes={currentRoundData} feedback={feedback} />
+
       </div>
       <div>
         <div className="p-4 flex">
@@ -131,10 +235,10 @@ const GamePlay = () => {
           )}
         </div>
       </div>
-      <div className="grid md:grid-cols-6 grid-cols-2 gap-2 align-middle items-center justify-center">
+      {/* <div className="grid md:grid-cols-6 grid-cols-2 gap-2 align-middle items-center justify-center">
         {intervals.map((interval) => (
           <button
-            className="bulge-on-hover border-2 border-ct-orange flex flex-col justify-center items-center rounded-md p-4 h-16 text-center w-full "
+            className="bulge-on-hover transition-colors ease-in-out duration-300 hover:bg-ct-hover-blue border-2 border-ct-orange flex flex-col justify-center items-center rounded-md p-4 h-16 text-center w-full "
             key={interval}
             onClick={() => handleAnswerClick(interval)}
             disabled={selectedAnswer !== null}
@@ -142,10 +246,19 @@ const GamePlay = () => {
             {interval}
           </button>
         ))}
-      </div>
-      <div className="my-4 flex items-center justify-center">
-        Time left: {timeLeft}s
-      </div>
+      </div> */}
+      <div className="grid md:grid-cols-6 grid-cols-2 gap-2 align-middle items-center justify-center">
+  {intervals.map((interval) => (
+    <button
+      className="bulge-on-hover transition-colors ease-in-out duration-300 hover:bg-ct-hover-blue border-2 border-ct-orange flex flex-col justify-center items-center rounded-md p-4 h-16 text-center w-full"
+      key={interval}
+      onClick={() => handleAnswerClick(interval)}
+      disabled={selectedAnswer !== null}
+    >
+      {interval}
+    </button>
+  ))}
+</div>
     </div>
   );
 };

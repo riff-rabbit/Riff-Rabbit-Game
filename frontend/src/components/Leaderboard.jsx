@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { fetchHandler } from "../utils";
 import { basicFetchOptions } from "../utils/";
+import { Cover } from "../components/Cover";
 
 const Leaderboard = () => {
   const [users, setUsers] = useState([]);
@@ -45,14 +46,14 @@ const Leaderboard = () => {
         }}
         key={user.id}
       >
-        {user.display_name} {user.points}xp
+       <Cover> <div className="ml-7">{user.display_name} {user.points}xp</div></Cover>
       </div>
       </>
     );
   };
 
   return (
-    <div className="bg-ct-light-grey md:h-96 flex flex-col items-center justify-items-center rounded-xl p-4">
+    <div className="bg-ct-light-grey  md:h-fit flex flex-col items-center justify-items-center rounded-xl p-4">
       {users.slice(0, 5).map(renderUser)}
     </div>
   );

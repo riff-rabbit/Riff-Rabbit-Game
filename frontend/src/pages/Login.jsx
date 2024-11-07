@@ -23,18 +23,46 @@ export default function LoginPage() {
     navigate(`/users/${user.id}`);
   };
 
-  return <>
-    <h1>Login</h1>
-    <form onSubmit={handleSubmit} aria-labelledby="login-heading">
-      <h2 id='login-heading'>Log back in!</h2>
-      <label htmlFor="username">Username</label>
-      <input type="text" autoComplete="username" id="username" name="username" />
+  return <div className="p-4 flex flex-col items-center align-middle justify-center">
+  <form 
+    onSubmit={handleSubmit} 
+    className="bg-ct-light-grey border-0 flex flex-col items-center justify-center align-middle w-full md:w-[35vw] rounded-xl p-10"
+    aria-labelledby="login-heading"
+  >
+    <h2 id='login-heading' className="text-center font-bold text-3xl mb-4 text-white">Log In</h2>
+    
+    <div className="flex- flex-col">
+      <label htmlFor="username" className="font-bold text-ct-orange">Username</label>
+      <input 
+        type="text" 
+        autoComplete="username" 
+        id="username" 
+        name="username"
+        className="rounded-xl p-2 border-4 border-transparent bg-[#13111D] text-white focus:outline-none focus:border-ct-orange"
+      />
+    </div>
 
-      <label htmlFor="password">Password</label>
-      <input type="password" autoComplete="current-password" id="password" name="password" />
+    <div className="flex- flex-col">
+      <label htmlFor="password" className="font-bold text-ct-orange">Password</label>
+      <input 
+        type="password" 
+        autoComplete="current-password" 
+        id="password" 
+        name="password" 
+        className="rounded-xl p-2 border-4 border-transparent bg-ct-dark-grey text-white focus:outline-none focus:border-ct-orange"
+      />
+    </div>
 
-      <button>Log in!</button>
-    </form>
-    {!!errorText && <p>{errorText}</p>}
-  </>;
+    <button 
+      className="bg-ct-orange bulge-on-hover hover:bg-ct-light-blue text-white font-bold py-2 px-4 rounded-xl transition duration-150"
+    >
+      Log in
+    </button>
+  </form>
+  
+  {!!errorText && (
+    <p className="text-red-500 text-center">{errorText}</p>
+  )}
+</div>
+
 }

@@ -58,3 +58,39 @@ exports.getIncomingChallenges = async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
+
+exports.updateChallengeResult = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { challengerScore, responderScore } = req.body;
+  
+      // Fetch the challenge to get challenger and responder IDs
+      const challenge = await Challenge.find(id);
+      if (!challenge) {
+        return res.status(404).json({ error: 'Challenge not found' });
+      }
+  
+      let winnerId = null;
+  
+      // Calculate the winner based on scores
+      if (challengerScore > responderScore) {
+        winnerId = challenge.challenger;
+      } else if (responderScore > challengerScore) {
+        winnerId = challenge.responder;
+      } else {
+        // It's a tie; winnerId remains null
+      }
+  
+      // Update the challenge status to 'completed' and set the winnerId
+      const updatedChallenge = await Challenge.updateChallengeResult(
+        id,
+        'completed',
+        winnerId
+      );
+  
+      res.json(updatedChallenge);
+    } catch (error) {
+      console.error('Error updating challenge result:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  };

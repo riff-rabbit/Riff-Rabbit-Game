@@ -11,15 +11,17 @@ export default function UserPage() {
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
   const [userProfile, setUserProfile] = useState(null);
   const [errorText, setErrorText] = useState(null);
+  const [showSettings, setShowSettings] = useState(false); // state to track button click
   const { id } = useParams();
   const isCurrentUserProfile = currentUser && currentUser.id === Number(id);
-  // console.log(currentUser);
 
   useEffect(() => {
     const loadUser = async () => {
-      const [user, error] = await getUser(id);
-      console.log(user);
-      if (error) return setErrorText(error.message);
+      const user = await getUser(id);
+      if (!user) {
+        setErrorText("Failed to fetch user");
+        return;
+      }
       setUserProfile(user);
     };
 
@@ -45,25 +47,54 @@ export default function UserPage() {
   const profilePoints = userProfile ? userProfile.points : null;
 
   return (
-    <div className="flex flex-col align-middle items-center justify-center">
-      <p className="font-semibold">{profileDisplayName}</p>
-      <h1 className="text-xs">{profileUsername}</h1>
+    <div className="flex flex-col align-middle items-center justify-center p-4">
+      <p className="font-bold text-ct-orange">{profileDisplayName}</p>
+      <h1 className="text-xs bg-ct-dark-grey text-white p-2 rounded-lg">{profileUsername}</h1>
 
-      <div className="bg-ct-light-blue flex flex-col align-middle items-center justify-center p-4 rounded-lg m-4">
-        <p>High Score: {profileHighScore}</p>
-        <p>Points: {profilePoints}</p>
-        <div className="bg-ct-light-purple border-2 m-2 px-2 bulge-on-hover rounded-full">
+      <div
+        className="bg-ct-light-blue flex flex-col align-middle items-center justify-center p-4 rounded-lg m-4"
+        style={{
+          border: "4px solid transparent",
+          borderRadius: "12px",
+          backgroundImage:
+            "linear-gradient(to right, #13111D, #13111D), linear-gradient(to right, #47B6FF, #957FFF)",
+          backgroundOrigin: "border-box",
+          backgroundClip: "padding-box, border-box",
+        }}
+      >
+        <p className="text-ct-orange">High Score: {profileHighScore}</p>
+        <p className="text-white">Points: {profilePoints}</p>
+        <div className="bulge-on-hover rounded-full">
           {!isCurrentUserProfile && <ChallengeButton />}
         </div>
       </div>
+
       {isCurrentUserProfile && (
-        <UpdateUsernameForm
-          currentUser={currentUser}
-          setCurrentUser={setCurrentUser}
-        />
+        <>
+          <button
+            className="bulge-on-hover hover:text-ct-light-blue p-2 rounded-xl text-white font-normal"
+            onClick={() => setShowSettings(!showSettings)}
+          >
+            Account Settings
+          </button>
+
+          {/* Conditionally render the UpdateUsernameForm */}
+          {showSettings && (
+            <UpdateUsernameForm
+              currentUser={currentUser}
+              setCurrentUser={setCurrentUser}
+            />
+          )}
+        </>
       )}
-      {!!isCurrentUserProfile && (
-        <button onClick={handleLogout}>Log Out</button>
+
+      {isCurrentUserProfile && (
+        <button
+          className="bulge-on-hover hover:text-ct-light-blue relative p-2 rounded-xl text-white font-normal"
+          onClick={handleLogout}
+        >
+          Log Out
+        </button>
       )}
     </div>
   );

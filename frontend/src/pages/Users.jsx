@@ -56,41 +56,62 @@ export default function UsersPage() {
     : [];
 
   return (
-    <div className="p-5 flex flex-col align-middle justify-center items-center">
-      {/* <h1>Friends</h1> */}
-      <input
-        className="rounded-full text-ct-dark-grey font-medium px-3 py-1"
-        type="text"
-        placeholder="Search users..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
+    <div className="p-5 md:justify-evenly flex flex-col align-middle md:flex-row justify-center md:items-start items-center">
+      <div className="flex-col flex md:w-[30vw] align-middle justify-center items-center">
+        <input
+          className="rounded-full flex text-ct-dark-grey font-medium px-3 py-1"
+          type="text"
+          placeholder="Search users..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
 
-    <div>
-      <ul>
-        {filteredUsers.map((user) => {
-          if (currentUser && !currentUser.friends.includes(user.id)) {
-            return (
-              <li className=" my-2 rounded-full flex items-center align-middle justify-between"  key={user.id}>
-                <div className="bg-ct-light-grey w-full px-4 rounded-l-full py-2"><UserLink user={user} /></div>
-                <button className="bg-ct-light-blue w-36 rounded-r-full px-4 py-2 hover:bg-ct-hover-blue transition-colors duration-300 ease-in-out" onClick={() => addFriend(user.id)}>Follow</button>
+        <div className="flex md:w-[30vw] flex-col">
+          <ul>
+            {filteredUsers.map((user) => {
+              if (currentUser && !currentUser.friends.includes(user.id)) {
+                return (
+                  <li
+                    className=" my-2 rounded-full flex items-center align-middle justify-between"
+                    key={user.id}
+                  >
+                    <div className="bg-ct-light-grey w-full px-4 rounded-l-full py-2">
+                      <UserLink user={user} />
+                    </div>
+                    <button
+                      className="bg-ct-light-blue w-36 rounded-r-full px-4 py-2 hover:bg-ct-hover-blue transition-colors duration-300 ease-in-out"
+                      onClick={() => addFriend(user.id)}
+                    >
+                      Follow
+                    </button>
+                  </li>
+                );
+              }
+            })}
+          </ul>
+
+          <ul>
+            {friends.map((user) => (
+              <li
+                className=" my-2 rounded-full flex items-center align-middle justify-between"
+                key={user.id}
+              >
+                <div className="bg-ct-light-grey w-full px-4 rounded-l-full py-2">
+                  <UserLink user={user} />
+                </div>
+                <button
+                  className="bg-ct-light-purple w-36 rounded-r-full px-4 py-2 hover:bg-ct-hover-purple transition-colors duration-300 ease-in-out"
+                  onClick={() => removeFriend(user.id)}
+                >
+                  Unfollow
+                </button>
               </li>
-            );
-          }
-        })}
-      </ul>
-
-      <ul>
-        {friends.map((user) => (
-          <li className=" my-2 rounded-full flex items-center align-middle justify-between" key={user.id}>
-            <div className="bg-ct-light-grey w-full px-4 rounded-l-full py-2"><UserLink user={user} /></div>
-            <button className="bg-ct-light-purple w-36 rounded-r-full px-4 py-2 hover:bg-ct-hover-purple transition-colors duration-300 ease-in-out" onClick={() => removeFriend(user.id)}>Unfollow</button>
-          </li>
-        ))}
-      </ul>
+            ))}
+          </ul>
+        </div>
       </div>
 
-      <Challenges users={users}/>
+      <Challenges users={users} />
     </div>
   );
 }

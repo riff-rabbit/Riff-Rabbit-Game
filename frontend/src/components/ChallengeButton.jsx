@@ -45,8 +45,16 @@ export default function ChallengeButton() {
   };
 
   return (
-    <div>
-      <button onClick={() => setShowPresetSelection(true)}>Challenge</button>
+    <div className='font-semibold flex items-center align-middle justify-center text-center flex-col p-4'>
+      <button className='font-semibold m-3 p-4 flex items-center align-middle justify-center text-center' onClick={() => setShowPresetSelection(true)}
+        style={{
+          border: "4px solid transparent",
+          borderRadius: "12px",
+          backgroundImage:
+            "linear-gradient(to right, #13111D, #13111D), linear-gradient(to right, #FFA500, #FFD700)",
+          backgroundOrigin: "border-box",
+          backgroundClip: "padding-box, border-box",
+        }}>Challenge</button>
       {showPresetSelection && (
         <GameSelectPanel onSelectPreset={handleChallengeCreation} />
       )}
