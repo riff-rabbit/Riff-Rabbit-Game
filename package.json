@@ -9,7 +9,7 @@
     "start": "cd server && npm start",
     "dev": "cd server && npm run dev",
     "dev:frontend": "cd frontend && npm run dev",
-    "connect": "psql -U postgres -d react_auth_example",
+    "connect": "psql -U postgres -d capstone",
     "lint": "eslint . --fix"
   },
   "keywords": [],

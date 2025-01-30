@@ -1,0 +1,35 @@
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+.bg-ct-dark2 {
+  background-color: #13111D;
+}
+
+.bg-ct-light-grey {
+  background-color: #222233;
+}
+
+.text-white {
+  color: #ffffff;
+}
+
+.shadow-lg {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.transition {
+  transition: all 0.3s ease;
+}
+
+.hover\:shadow-xl:hover {
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+}
+
+.hover\:scale-105:hover {
+  transform: scale(1.05);
+} 

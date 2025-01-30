@@ -35,13 +35,24 @@ class Challenge {
     return rows.map((challenge) => new Challenge(challenge));
   }
 
-  static async create(challenger, responder, preset, rounds, status = 'pending') {
-    // hash the plain-text password using bcrypt before storing it in the database);
-    const query = `INSERT INTO challenges (challenger, responder, preset, rounds, status)
-      VALUES (?, ?, ?, ?, ?) RETURNING *`;
-    const { rows } = await knex.raw(query, [challenger, responder, preset, rounds, status]);
-    const challenge = rows[0];
-    return new Challenge(challenge);
+  static async create(id, challenger, responder, preset, rounds, status = 'pending', winner = null) {
+    const query = `
+      INSERT INTO challenges (id, challenger, responder, preset, rounds, status, winner)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+      RETURNING *
+    `;
+    
+    const { rows } = await knex.raw(query, [
+      id,
+      challenger,
+      responder,
+      preset,
+      rounds,
+      status,
+      winner
+    ]);
+    
+    return rows[0] ? new Challenge(rows[0]) : null;
   }
 
   // this is an instance method that we can use to update

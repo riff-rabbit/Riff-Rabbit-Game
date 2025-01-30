@@ -21,15 +21,13 @@ This document is a comprehensive guide to build the RiffRabit interval recogniti
 
 
 **Key Folders**:
-1. **client/src/components**: Reusable UI components (e.g., `IntervalSelectionComponent`, `LeaderboardComponent`, etc.).
-2. **client/src/pages**: Main pages (e.g., `SignUpPage`, `GameplayPage`, `FriendsPage`, etc.).
+1. **frontend/src/components**: Reusable UI components (e.g., `IntervalSelectionComponent`, `LeaderboardComponent`, etc.).
+2. **frontend/src/pages**: Main pages (e.g., `SignUpPage`, `GameplayPage`, `FriendsPage`, etc.).
 3. **server/models**: Database models (`User`, `Challenge`, etc.) interacting with PostgreSQL via Knex.
 4. **server/controllers**: Business logic that orchestrates requests/responses with the database.
 5. **server/routes**: Express routes that map HTTP endpoints to controller methods.
 6. **migrations/seeds**: Knex migrations to create and structure DB tables, plus seed data for testing.
 7. **config**: Environment variables, secret keys, and database configs.
-
----
 
 ## 3. Database Schema
 

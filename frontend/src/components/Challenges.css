@@ -1,0 +1,15 @@
+.outcome-won {
+  color: green;
+}
+
+.outcome-tie {
+  color: yellow; /* Change to yellow for tie */
+}
+
+.outcome-lost {
+  color: red;
+}
+
+.outcome-unplayed {
+  color: grey;
+} 

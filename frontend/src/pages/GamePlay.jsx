@@ -1,5 +1,5 @@
 // GamePlay.jsx
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { generateGameRounds, presets } from "../utils/gameLogic";
 import { useSelectedPreset } from "../contexts/SelectedPresetContext";
 import { intervals } from "../utils/gameLogic";
@@ -12,6 +12,7 @@ import NotePlayer from "../components/NotePlayer";
 import playSequence from "../utils/playSequence";
 import { updateChallengeStatus } from "../adapters/challenge-adapter";
 import { updateChallengeResult } from "../adapters/challenge-adapter";
+import CurrentUserContext from "../contexts/current-user-context";
 
 const GamePlay = () => {
   const VF = Vex.Flow;
@@ -30,6 +31,8 @@ const GamePlay = () => {
   const status = location.state?.status;
   const challenge_id = location.state?.challenge_id;
   console.log(location);
+
+  const { currentUser } = useContext(CurrentUserContext);
 
   useEffect(() => {
     if (selectedPreset) {
@@ -119,7 +122,38 @@ const handleNextRound = async () => {
         const responderScore = rounds.length - correctAnswers;
         
         console.log('Submitting challenge result...');
-        await submitChallengeResult(challenge_id, challengerScore, responderScore);
+        const [updatedChallenge] = await submitChallengeResult(
+          challenge_id,
+          challengerScore,
+          responderScore
+        );
+
+        console.log('Updated challenge:', updatedChallenge);
+
+        // Get the winner information
+        const isWinner = updatedChallenge.winner === currentUser.id;
+        const isTie = updatedChallenge.winner === null;
+
+        // Update user points
+        const [updatedUser, error] = await updateUserPoints(pointsEarned);
+        if (error) {
+          console.error('Failed to update user points:', error);
+        }
+
+        navigate("/gameover", {
+          state: {
+            gameName: selectedPreset.name,
+            rounds: selectedPreset.rounds,
+            correctAnswers,
+            pointsEarned,
+            totalPoints: updatedUser ? updatedUser.points : null,
+            status: game ? status : null,
+            isMultiplayer: true,
+            isWinner,
+            isTie
+          },
+        });
+        return;
       }
 
       console.log('Updating user points...');
@@ -163,18 +197,21 @@ const handleNextRound = async () => {
 
 const submitChallengeResult = async (challengeId, challengerScore, responderScore) => {
   try {
-      const [response, error] = await updateChallengeResult(
-        challengeId,
-        challengerScore,
-        responderScore
+    const [response, error] = await updateChallengeResult(
+      challengeId,
+      challengerScore,
+      responderScore
     );
-      if (error) {
-          console.error("Failed to update challenge result:", error);
-      } else {
-          console.log("Challenge result updated successfully:", response);
-      }
+    if (error) {
+      console.error("Failed to update challenge result:", error);
+      return [null, error];
+    } else {
+      console.log("Challenge result updated successfully:", response);
+      return [response, null];
+    }
   } catch (error) {
-      console.error("Error in submitting challenge result:", error);
+    console.error("Error in submitting challenge result:", error);
+    return [null, error];
   }
 };
 

@@ -123,7 +123,7 @@ const GameStat = () => {
           const winnerDetails = await getUser(fetchedChallenge.winner);
           setWinnerName(winnerDetails ? winnerDetails.display_name : "Winner not found");
         } else {
-          setWinnerName("It's a tie!");
+          setWinnerName("Tied");
         }
       }
     };
@@ -139,9 +139,6 @@ const GameStat = () => {
         <h1 className="text-2xl font-bold mb-4">Game Statistics</h1>
         {challenge ? (
           <ul className="text-lg">
-            <li className="mb-2">
-              Challenge ID: <span className="text-orange-300">{challenge.id}</span>
-            </li>
             <li className="mb-2 text-ct-light-purple">
               {challengerName} VS {responderName}
             </li>

@@ -51,6 +51,8 @@ const presets = [
 const Challenge = require("../models/Challenge");
 const User = require("../models/User");
 
+console.log(presets);
+
 const generatedGame = [
   {
     firstNote: "C3",
@@ -108,22 +110,15 @@ const generatedGame = [
  * @returns { Promise<void> }
  */
 exports.seed = async (knex) => {
-  // Before you have models you can always just do `await knex('table_name').del`
+  // Clear existing entries
   await knex("challenges").del();
   await knex("users").del();
 
+  // Reset sequences
   await knex.raw("ALTER SEQUENCE users_id_seq RESTART WITH 1");
   await knex.raw("ALTER SEQUENCE challenges_id_seq RESTART WITH 1");
 
-  // await knex('users').insert({
-  //   username: 'alice',
-  //   password: 'password',
-  //   friends: [],
-  //   display_name: 'Alice',
-  //   high_score: 100,
-  //   points: 1000,
-  // });
-
+  // Insert users
   await User.create("alice", "password", "Alice", [3, 2], 1500, 100);
   await User.create("philip", "phil22", "Philip", [3], 300, 10);
   await User.create("anastasia", "1234", "Anastasia");
@@ -154,59 +149,17 @@ exports.seed = async (knex) => {
   await User.create("jackson_five", "1234", "Jackson", [2, 5], 900, 90);
   await User.create("madison_ivy", "1234", "Madison", [1, 3], 950, 95);
 
-  await Challenge.create(1, 2, 1, JSON.stringify(generatedGame));
-  await Challenge.create(2, 1, 2, JSON.stringify(generatedGame), "completed");
-  await Challenge.create(
-    3,
-    7,
-    0,
-    JSON.stringify(generatedGame),
-    "completed",
-    7
-  );
-  await Challenge.create(4, 2, 1, JSON.stringify(generatedGame));
-  await Challenge.create(5, 9, 2, JSON.stringify(generatedGame));
-  await Challenge.create(
-    10,
-    3,
-    3,
-    JSON.stringify(generatedGame),
-    "completed",
-    10
-  );
-  await Challenge.create(
-    6,
-    1,
-    4,
-    JSON.stringify(generatedGame),
-    "completed",
-    1
-  );
-
-  await Challenge.create(8, 4, 0, JSON.stringify(generatedGame));
-  await Challenge.create(
-    9,
-    5,
-    1,
-    JSON.stringify(generatedGame),
-    "completed",
-    9
-  );
-  await Challenge.create(
-    7,
-    8,
-    2,
-    JSON.stringify(generatedGame),
-    "completed",
-    8
-  );
-  await Challenge.create(2, 10, 3, JSON.stringify(generatedGame));
-  await Challenge.create(
-    1,
-    6,
-    4,
-    JSON.stringify(generatedGame),
-    "completed",
-    6
-  );
+  // Insert challenges
+  await Challenge.create(1, 2, 1, 0, JSON.stringify(generatedGame));
+  await Challenge.create(2, 1, 2, 0, JSON.stringify(generatedGame), "completed", 1);
+  await Challenge.create(3, 7, 0, 0, JSON.stringify(generatedGame), "completed", 7);
+  await Challenge.create(4, 2, 1, 0, JSON.stringify(generatedGame));
+  await Challenge.create(5, 9, 2, 0, JSON.stringify(generatedGame));
+  await Challenge.create(6, 3, 3, 0, JSON.stringify(generatedGame), "completed", 3);
+  await Challenge.create(7, 1, 4, 0, JSON.stringify(generatedGame), "completed", 4);
+  await Challenge.create(8, 4, 0, 0, JSON.stringify(generatedGame));
+  await Challenge.create(9, 5, 1, 0, JSON.stringify(generatedGame), "completed", 5);
+  await Challenge.create(10, 8, 2, 0, JSON.stringify(generatedGame), "completed", 2);
+  await Challenge.create(11, 10, 3, 0, JSON.stringify(generatedGame));
+  await Challenge.create(12, 6, 4, 0, JSON.stringify(generatedGame), "completed", null);
 };

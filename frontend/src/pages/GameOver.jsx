@@ -5,7 +5,16 @@ const GameOver = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { gameName, rounds, correctAnswers, totalPoints } = location.state || {};
+  const { 
+    gameName, 
+    rounds, 
+    correctAnswers, 
+    totalPoints, 
+    isMultiplayer,
+    isWinner,
+    isTie 
+  } = location.state || {};
+
   const pointsEarned = correctAnswers * 10;
   const scorePercentage = ((correctAnswers / rounds) * 100).toFixed(2);
 
@@ -13,6 +22,20 @@ const GameOver = () => {
     <div className="flex flex-row items-center align-middle justify-center">
       <div className="flex flex-col md:w-[35vw] items-center justify-center p-6 bg-ct-light-grey text-white rounded-xl m-5 shadow-lg">
         <h1 className="text-2xl font-bold mb-4">Game Over</h1>
+        
+        {/* Show winner/loser message for multiplayer games */}
+        {isMultiplayer && (
+          <div className="text-2xl font-bold mb-4">
+            {isTie ? (
+              <span className="text-yellow-500">Tied</span>
+            ) : isWinner ? (
+              <span className="text-ct-light-green">You Won!</span>
+            ) : (
+              <span className="text-ct-orange">You Lost!</span>
+            )}
+          </div>
+        )}
+
         <p className="text-lg">
           Game: <span className="text-orange-300">{gameName}</span>
         </p>
@@ -29,12 +52,6 @@ const GameOver = () => {
         <p className="text-lg">
           Points Earned:{" "}
           <span className="text-ct-light-green">+{pointsEarned}xp</span>
-        </p>
-        <p className="text-lg">
-          Total Points:{" "}
-          <span className="text-ct-light-green">
-            {totalPoints !== null && totalPoints !== undefined ? `${totalPoints}xp` : 'N/A'}
-          </span>
         </p>
         <button
           onClick={() => navigate("/")}
